@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site } from '../../site';
+---
+
+<Base lang="en" page="imprint" title="Imprint" description={`Imprint of ${site.legalName}.`}>
+  <div class="section">
+    <article class="container prose">
+      <h1>Imprint</h1>
+
+      <h2>Company</h2>
+      <address>
+        {site.legalName}<br />
+        {site.street}<br />
+        {`${site.zip} ${site.city}`}<br />
+        Switzerland
+      </address>
+      <p>Email: <a href={`mailto:${site.email}`}>{site.email}</a></p>
+
+      <h2>Commercial register</h2>
+      <p>
+        Registered in the commercial register of the Canton of Schwyz<br />
+        Business identification number (UID): {site.uid}
+      </p>
+
+      <h2>Disclaimer</h2>
+      <p>
+        The content of this website has been compiled with the greatest care. However, we
+        accept no liability for the accuracy, completeness or timeliness of the content.
+        Liability claims for material or immaterial damage arising from access to or use of
+        the published information are excluded to the extent permitted by law.
+      </p>
+      <p>The operators of linked external websites are solely responsible for their content.</p>
+
+      <h2>Copyright</h2>
+      <p>
+        Texts, images and logos on this website belong to {site.legalName} or the respective
+        rights holders. Any use requires prior written consent.
+      </p>
+
+      <p><small>This is a translation. The German version is legally binding.</small></p>
+    </article>
+  </div>
+</Base>

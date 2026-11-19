@@ -1,0 +1,50 @@
+---
+import { site } from '../site';
+import { localizedPath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>© {year} {site.legalName}</p>
+    <nav aria-label={t['footer.legal']}>
+      <a href={localizedPath('imprint', lang)}>{t['footer.imprint']}</a>
+      <a href={localizedPath('privacy', lang)}>{t['footer.privacy']}</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-block: 2rem;
+  }
+  p {
+    margin: 0;
+  }
+  nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+  a {
+    color: inherit;
+  }
+  a:hover {
+    color: var(--brand);
+  }
+</style>

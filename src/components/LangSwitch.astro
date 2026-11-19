@@ -1,0 +1,65 @@
+---
+// Minimal language switcher (DE · EN) – links to the same page in the other language.
+import { languages, localizedPath, useTranslations, type Lang, type Page } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  page: Page;
+  /** Use light text, e.g. on the blue hero */
+  light?: boolean;
+}
+
+const { lang, page, light = false } = Astro.props;
+const t = useTranslations(lang);
+const entries = Object.entries(languages) as [Lang, (typeof languages)[Lang]][];
+---
+
+<nav class:list={['lang-switch', { light }]} aria-label={t['lang.switch']}>
+  {
+    entries.map(([code, l], i) => (
+      <>
+        {i > 0 && <span aria-hidden="true">·</span>}
+        {code === lang ? (
+          <span class="current" aria-current="true" title={l.name}>
+            {l.label}
+          </span>
+        ) : (
+          <a href={localizedPath(page, code)} hreflang={code} lang={code} title={l.name}>
+            {l.label}
+          </a>
+        )}
+      </>
+    ))
+  }
+</nav>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.75;
+  }
+  a:hover {
+    opacity: 1;
+    color: var(--brand);
+  }
+  .current {
+    color: var(--ink);
+  }
+  .light {
+    color: rgb(255 255 255 / 0.75);
+  }
+  .light a:hover,
+  .light .current {
+    color: #fff;
+  }
+</style>

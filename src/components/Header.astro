@@ -1,0 +1,39 @@
+---
+// Slim header for subpages (imprint, privacy) – logo linking home plus language switcher.
+import Logo from './Logo.astro';
+import LangSwitch from './LangSwitch.astro';
+import { localizedPath, useTranslations, type Lang, type Page } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  page: Page;
+}
+
+const { lang, page } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<header class="site-header">
+  <div class="container">
+    <a href={localizedPath('home', lang)} class="brand" aria-label={t['home.link']}>
+      <Logo />
+    </a>
+    <LangSwitch lang={lang} page={page} />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--line);
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3.25rem;
+  }
+  .brand {
+    display: block;
+    height: 1.4rem;
+  }
+</style>

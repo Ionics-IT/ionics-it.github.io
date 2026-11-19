@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site';
+---
+
+<Base lang="de" page="privacy" title="Datenschutz" description={`Datenschutzerklärung der ${site.legalName}.`}>
+  <div class="section">
+    <article class="container prose">
+      <h1>Datenschutzerklärung</h1>
+      <p>
+        Wir nehmen den Schutz Ihrer Personendaten ernst und bearbeiten sie gemäss dem
+        Schweizer Bundesgesetz über den Datenschutz (DSG). Diese Website kommt ohne Cookies,
+        ohne Tracking und ohne eingebundene Inhalte von Drittanbietern aus.
+      </p>
+
+      <h2>Verantwortliche Stelle</h2>
+      <address>
+        {site.legalName}<br />
+        {site.street}<br />
+        {`${site.zip} ${site.city}`}<br />
+        Schweiz<br />
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </address>
+
+      <h2>Hosting</h2>
+      <p>
+        Diese Website wird über GitHub Pages bereitgestellt, einen Dienst der GitHub, Inc.
+        (USA). Beim Aufruf der Website verarbeitet GitHub technisch notwendige Daten wie die
+        IP-Adresse, Datum und Uhrzeit des Zugriffs sowie Informationen zum verwendeten Browser,
+        um die Website auszuliefern und deren Sicherheit zu gewährleisten. Dabei können Daten in
+        die USA übermittelt werden. Weitere Informationen finden Sie in der
+        <a
+          href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement"
+          target="_blank"
+          rel="noopener noreferrer">Datenschutzerklärung von GitHub</a
+        >.
+      </p>
+
+      <h2>Kontaktaufnahme</h2>
+      <p>
+        Wenn Sie uns per E-Mail kontaktieren, verwenden wir Ihre Angaben ausschliesslich zur
+        Bearbeitung Ihrer Anfrage. Wir geben diese Daten nicht ohne Ihre Einwilligung weiter.
+      </p>
+
+      <h2>Externe Links</h2>
+      <p>
+        Diese Website verlinkt auf unsere LinkedIn-Seite. LinkedIn bearbeitet erst dann Daten,
+        wenn Sie dem Link folgen; dort gilt die Datenschutzerklärung von LinkedIn.
+      </p>
+
+      <h2>Ihre Rechte</h2>
+      <p>
+        Sie haben das Recht auf Auskunft über die von uns bearbeiteten Personendaten sowie auf
+        deren Berichtigung oder Löschung. Wenden Sie sich dazu an die oben genannte Adresse.
+      </p>
+
+      <p><small>Stand: November 2026</small></p>
+    </article>
+  </div>
+</Base>

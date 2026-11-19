@@ -1,0 +1,263 @@
+---
+// Home page content, shared by all languages (rendered from src/pages/index.astro and
+// src/pages/en/index.astro).
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Logo from './Logo.astro';
+import LangSwitch from './LangSwitch.astro';
+import panorama from '../assets/panorama.jpg';
+import { site } from '../site';
+import { localizedPath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// The panorama tiles seamlessly → rendered as an endless band. Generate optimized variants:
+const [panoAvif, panoWebp] = await Promise.all([
+  getImage({ src: panorama, format: 'avif', width: 2266 }),
+  getImage({ src: panorama, format: 'webp', width: 2266 }),
+]);
+const panoBg = `image-set(url("${panoAvif.src}") type("image/avif"), url("${panoWebp.src}") type("image/webp"))`;
+const panoRatio = panorama.width / panorama.height;
+---
+
+<Base lang={lang} page="home" header={false}>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-content">
+      <div class="hero-top">
+        <a href={localizedPath('home', lang)} class="hero-logo" aria-label={t['home.link']}>
+          <Logo />
+        </a>
+        <LangSwitch lang={lang} page="home" light />
+      </div>
+      <h1 id="hero-title">{t['hero.title'].replace('{year}', String(site.founded))}</h1>
+      <p class="hero-lead">{t['hero.lead']}</p>
+    </div>
+    <div
+      class="panorama"
+      role="img"
+      aria-label={t['hero.imageAlt']}
+      style={`--pano-bg: ${panoBg}; --pano-ratio: ${panoRatio};`}
+    >
+      <div class="panorama-strip"></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="journey-title">
+    <div class="container">
+      <p class="eyebrow">{t['journey.eyebrow']}</p>
+      <h2 id="journey-title" class="section-title">{t['journey.title']}</h2>
+      <p class="lead">{t['journey.lead']}</p>
+      <ol class="stages">
+        {
+          t['journey.stages'].map((s, i) => (
+            <li class="stage">
+              <span class="stage-index" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section contact" aria-labelledby="contact-title">
+    <div class="container contact-grid">
+      <div>
+        <h2 id="contact-title" class="section-title">{t['contact.title']}</h2>
+        <a class="contact-mail" href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="contact-linkedin" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"
+            ></path>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+      <address class="contact-address">
+        <strong>{site.legalName}</strong><br />
+        {site.street}<br />
+        {`${site.zip} ${site.city}`}<br />
+        {t.country}
+        <br /><br />
+        <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">{t['contact.map']} ↗</a>
+      </address>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero ---------------------------------------------------------------- */
+  .hero {
+    background: var(--sky);
+    color: #fff;
+    overflow: hidden;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: clamp(1.25rem, 3vw, 2rem);
+    padding-bottom: 0.5rem;
+  }
+  .hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 5vw, 3.25rem);
+  }
+  .hero-logo {
+    display: block;
+    width: fit-content;
+    height: clamp(1.75rem, 3vw, 2.25rem);
+    --logo-text: #fff;
+    --logo-mark: #fff;
+  }
+  .hero h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    letter-spacing: -0.03em;
+  }
+  .hero-lead {
+    max-width: 38rem;
+    margin: 0.75rem 0 0;
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    color: rgb(255 255 255 / 0.92);
+  }
+  .hero h1,
+  .hero-lead {
+    /* Readability where the peaks reach behind the text */
+    text-shadow: 0 1px 12px rgb(1 60 110 / 0.35);
+  }
+  /* Endlessly drifting panorama (as on the previous site) */
+  .panorama {
+    /* Image height: slightly scaled down from the original (500 px) */
+    --pano-h: 450px;
+    /* Visible height: part of the sky is cropped at the top */
+    --pano-visible: 400px;
+    /* Pull the band up so the peaks reach slightly behind the text */
+    --pano-overlap: 150px;
+    --tile: calc(var(--pano-h) * var(--pano-ratio));
+    position: relative;
+    z-index: 0;
+    height: var(--pano-visible);
+    margin-top: calc(-1 * var(--pano-overlap));
+    overflow: hidden;
+    /* Soft fade into the background colour */
+    mask-image: linear-gradient(to bottom, transparent 0, #000 15%);
+  }
+  .panorama-strip {
+    position: absolute;
+    inset: 0 auto 0 0;
+    /* One tile wider than the viewport so no gap appears while moving */
+    width: calc(100% + var(--tile));
+    background-image: var(--pano-bg);
+    background-repeat: repeat-x;
+    background-size: var(--tile) var(--pano-h);
+    background-position: 0 100%;
+    transform: translate3d(calc(-1 * var(--tile)), 0, 0);
+    animation: pano-drift 120s linear infinite;
+    will-change: transform;
+  }
+  @keyframes pano-drift {
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .panorama-strip {
+      animation: none;
+      transform: translate3d(calc(-0.28 * var(--tile)), 0, 0);
+    }
+  }
+
+  /* Journey ------------------------------------------------------------- */
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem;
+    margin: 3rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stage {
+    padding: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+  }
+  .stage-index {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--sky);
+  }
+  .stage h3 {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+  }
+  .stage p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* Contact ------------------------------------------------------------- */
+  .contact {
+    background: var(--ink);
+    color: rgb(255 255 255 / 0.85);
+  }
+  .contact .section-title {
+    color: #fff;
+  }
+  .contact-grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: end;
+  }
+  @media (min-width: 52rem) {
+    .contact-grid {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+  .contact-mail {
+    color: #fff;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 600;
+    text-decoration-color: var(--sky);
+    text-underline-offset: 0.3em;
+    overflow-wrap: anywhere;
+  }
+  .contact-mail:hover {
+    color: #7fb6ff;
+  }
+  .contact-linkedin {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    margin-top: 1.25rem;
+    color: rgb(255 255 255 / 0.85);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .contact-linkedin:hover {
+    color: #fff;
+  }
+  .contact-address {
+    font-style: normal;
+    line-height: 1.7;
+  }
+  .contact-address strong,
+  .contact-address a {
+    color: #fff;
+  }
+</style>

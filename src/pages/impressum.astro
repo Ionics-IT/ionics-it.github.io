@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site';
+---
+
+<Base lang="de" page="imprint" title="Impressum" description={`Impressum der ${site.legalName}.`}>
+  <div class="section">
+    <article class="container prose">
+      <h1>Impressum</h1>
+
+      <h2>Anbieterin</h2>
+      <address>
+        {site.legalName}<br />
+        {site.street}<br />
+        {`${site.zip} ${site.city}`}<br />
+        Schweiz
+      </address>
+      <p>E-Mail: <a href={`mailto:${site.email}`}>{site.email}</a></p>
+
+      <h2>Handelsregister</h2>
+      <p>
+        Eingetragen im Handelsregister des Kantons Schwyz<br />
+        Unternehmens-Identifikationsnummer (UID): {site.uid}
+      </p>
+
+      <h2>Haftungsausschluss</h2>
+      <p>
+        Die Inhalte dieser Website wurden mit grösster Sorgfalt erstellt. Für die Richtigkeit,
+        Vollständigkeit und Aktualität der Inhalte übernehmen wir jedoch keine Gewähr.
+        Haftungsansprüche wegen Schäden materieller oder immaterieller Art, die aus dem Zugriff
+        auf oder der Nutzung der veröffentlichten Informationen entstanden sind, werden
+        ausgeschlossen, soweit gesetzlich zulässig.
+      </p>
+      <p>
+        Für Inhalte externer Websites, auf die wir verlinken, sind ausschliesslich deren
+        Betreiber verantwortlich.
+      </p>
+
+      <h2>Urheberrechte</h2>
+      <p>
+        Texte, Bilder und Logos auf dieser Website gehören der {site.legalName} oder den
+        jeweiligen Rechteinhabern. Eine Verwendung ohne vorgängige schriftliche Zustimmung ist
+        nicht gestattet.
+      </p>
+    </article>
+  </div>
+</Base>
